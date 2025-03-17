@@ -1,183 +1,258 @@
-**Introduction to DBMS and SQL Keys**
+### Introduction to DBMS and SQL Keys
 
-**1. Database Overview:**
-- A database stores related data efficiently. A DBMS (Database Management System) is used to manage it.
-- **Relational Database (RDBMS)**: Represents data in tables with strict schemas (e.g., MySQL, Oracle).
-- **Non-Relational Database**: Stores data as documents, key-value pairs, etc., without strict schemas (e.g., MongoDB, Redis).
+---
 
-**2. Schema:**
-- A schema defines the structure or design of a database.
+#### How do you store information frequently:
+- Notes
+- Workpad
+- Excel Sheet
+- Google Sheet
 
-**3. RDBMS Properties:**
-- Tables store specific information.
-- Rows are unique, columns have atomic values.
-- No guaranteed column sequence, rely on column names.
+#### What is a Database?
+- **Database**: A collection of related data. 
+- **DBMS (Database Management System)**: A system used to manage a database efficiently.
 
-**4. Keys in Relational Databases:**
+#### Types of Database Systems:
+1. **Relational Databases** (e.g., MySQL, Oracle, PostgreSQL)
+   - Represent data in multiple related tables.
+   - Strict schema enforcement.
+   - Data is structured in rows and columns, with tables related using keys.
 
-- **Super Key**: A set of columns used to uniquely identify a row.
-  - Example:
+2. **Non-Relational Databases** (e.g., MongoDB, Redis, Cassandra)
+   - Store data as documents, key-value pairs, or graphs.
+   - Do not follow strict schema rules, allowing semi-structured or unstructured data.
 
-  | Name   | PSP  | Batch | Phone Number | Email          |
-  |--------|------|-------|--------------|----------------|
-  | Alice  | 100  | A1    | 9876543210   | alice@mail.com |
-  | Bob    | 200  | A2    | 9876543222   | bob@mail.com   |
+#### Schema:
+- **Schema**: Structure/Design of a database that defines the organization of data.
 
-  - **Super Key Example**:  
-    - `Name + Phone Number`
-    - `Name + Email`
-    - These combinations can uniquely identify a row.
+---
 
-- **Candidate Key**: A minimal set of columns that uniquely identifies a row without any extra attributes.
-  - Example: 
+### Relational Database Properties:
+1. **Tables**: Each table stores specific information (e.g., Student table stores student details).
+2. **Unique Rows**: Every row in a table is unique.
+3. **Same Data Type**: All values in a column share the same data type.
+4. **Atomic Values**: Each cell contains a single, indivisible value.
+5. **Column Sequence Irrelevant**: Column sequence does not affect the data; rely on column names.
 
-  | StudentID | ClassID | Name   | Age |
-  |-----------|---------|--------|-----|
-  | 1         | 101     | Alice  | 20  |
-  | 2         | 102     | Bob    | 22  |
+---
 
-  - **Candidate Key Example**:  
-    - `StudentID + ClassID`
-    - Both are minimal and can uniquely identify a row.
+### SQL Keys in Relational Databases:
 
-- **Primary Key**: A candidate key chosen to uniquely identify rows in a table.
-  - Properties: Unique, non-null, and immutable.
-  - Example:
+#### Super Key:
+- A combination of columns that can uniquely identify a row.
+- Example: `Name + Phone`, `Name + Email`.
+- Super keys may include additional attributes beyond what is necessary to uniquely identify rows.
 
-  | EmployeeID | Name   | Email          |
-  |------------|--------|----------------|
-  | E001       | Alice  | alice@mail.com |
-  | E002       | Bob    | bob@mail.com   |
+**Example:**
 
-  - **Primary Key**: `EmployeeID` is used to uniquely identify rows.
+| Name      | PSP | Batch | Phone Number | Email           |
+|-----------|-----|-------|--------------|-----------------|
+| Alice     | 75  | B1    | 1234567890   | alice@mail.com  |
+| Bob       | 82  | B2    | 2345678901   | bob@mail.com    |
+| Charlie   | 78  | B3    | 3456789012   | charlie@mail.com|
 
-- **Composite Key**: When no single column can uniquely identify a row, a combination of two or more columns is used.
-  - Example: 
+- Super keys:
+  - `Name + Phone Number`
+  - `Email + PSP`
+  - `Phone Number + Email`
 
-  | OrderID | ProductID | Quantity |
-  |---------|-----------|----------|
-  | 101     | 501       | 2        |
-  | 101     | 502       | 1        |
+#### Candidate Key:
+- A minimal set of columns used to uniquely identify a row.
+- Characteristics:
+  - No unnecessary attributes.
+  - A table can have multiple candidate keys.
+  - One of the candidate keys is selected as the primary key.
 
-  - **Composite Primary Key**: `OrderID + ProductID` together form a unique identifier.
+**Example:**
 
-- **Foreign Key**: A column in one table that references a primary key in another table to maintain referential integrity.
-  - Example:
+| StudentID | Name   | ClassID | Email           |
+|-----------|--------|---------|-----------------|
+| 101       | Alice  | C1      | alice@mail.com  |
+| 102       | Bob    | C2      | bob@mail.com    |
+| 103       | Charlie| C3      | charlie@mail.com|
 
-  | BatchID | BatchName |
-  |---------|-----------|
-  | 1       | Batch A   |
-  | 2       | Batch B   |
+- Candidate keys:
+  - `StudentID`
+  - `Email`
 
-  | StudentID | Name   | BatchID |
-  |-----------|--------|---------|
-  | 1         | Alice  | 1       |
-  | 2         | Bob    | 2       |
+#### Primary Key:
+- A candidate key selected to uniquely identify each row.
+- Properties:
+  - **Uniqueness**: Must be unique.
+  - **Non-nullability**: Cannot be null.
+  - **Immutability**: Should not change (to avoid referential integrity issues).
+- Can be a **composite primary key** if multiple columns are needed to uniquely identify rows.
 
-  - **Foreign Key Example**: `BatchID` in the **Student** table references `BatchID` in the **Batch** table.
-    - If BatchID 1 is deleted from the **Batch** table, corresponding rows in **Student** table can be set to `NULL`, cascaded, or restricted based on foreign key constraints.
+#### Foreign Key:
+- A column in one table that references a primary key in another table, ensuring referential integrity.
 
-**5. SQL Commands with Examples:**
+**Example:**
 
-- **Create Database**: 
-  - Command: `CREATE DATABASE Users;`
-  - Example: Creates a database named **Users**.
+| StudentID | Name   | BatchID |
+|-----------|--------|---------|
+| 101       | Alice  | B1      |
+| 102       | Bob    | B2      |
 
-- **Use Database**: 
-  - Command: `USE Users;`
-  - Example: Switches to the **Users** database for performing operations.
+| BatchID | Batch Name |
+|---------|------------|
+| B1      | Batch A    |
+| B2      | Batch B    |
 
-- **Create Table**:
-  - Command: 
-  ```sql
-  CREATE TABLE Employees (
-    EmployeeID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    Email VARCHAR(50) UNIQUE
-  );
-  ```
-  - Example: Creates a table named **Employees** with columns for `EmployeeID` (primary key), `Name`, and `Email` (unique constraint).
+Here, `BatchID` in the **Students** table is a foreign key that references `BatchID` in the **Batch** table.
 
-- **Insert Data**:
-  - Command:
-  ```sql
-  INSERT INTO Employees (EmployeeID, Name, Email)
-  VALUES (1, 'Alice', 'alice@mail.com'), (2, 'Bob', 'bob@mail.com');
-  ```
-  - Example: Inserts two rows of data into the **Employees** table.
+---
 
-- **Select Data**:
-  - Command: `SELECT * FROM Employees;`
-  - Example: Retrieves all rows from the **Employees** table.
+### Important Concepts:
+1. **Composite Key**: A key made of multiple columns to uniquely identify a row.
+2. **Referential Integrity**: Ensures relationships between tables remain consistent when data is updated or deleted.
 
-  | EmployeeID | Name   | Email          |
-  |------------|--------|----------------|
-  | 1          | Alice  | alice@mail.com |
-  | 2          | Bob    | bob@mail.com   |
+---
 
-- **Describe Table**:
-  - Command: `DESCRIBE Employees;`
-  - Example: Displays the structure of the **Employees** table.
+### MySQL Installation and Setup:
+- Install MySQL: `sudo apt install mysql-server`
+- Start MySQL: `sudo systemctl start mysql`
+- Check MySQL Status: `sudo systemctl status mysql`
 
-  | Field      | Type         | Null | Key  | Default | Extra |
-  |------------|--------------|------|------|---------|-------|
-  | EmployeeID | INT          | NO   | PRI  | NULL    |       |
-  | Name       | VARCHAR(50)  | YES  |      | NULL    |       |
-  | Email      | VARCHAR(50)  | YES  | UNI  | NULL    |       |
+### Basic SQL Commands:
+- Create a database: `CREATE DATABASE Users`
+- Use a database: `USE Users`
+- Create a table: (example with `id` as a primary key)
+- Describe table structure: `DESCRIBE Users`
+- Select all data: `SELECT * FROM Users`
+- Drop a table: `DROP TABLE IF EXISTS Students` (Caution when using `DROP` or `DELETE`)
 
-- **Drop Table**:
-  - Command: `DROP TABLE IF EXISTS Employees;`
-  - Example: Deletes the **Employees** table if it exists.
+---
 
-- **Composite Key**:
-  - Command:
-  ```sql
-  CREATE TABLE Orders (
-    OrderID INT,
-    ProductID INT,
-    Quantity INT,
-    PRIMARY KEY (OrderID, ProductID)
-  );
-  ```
-  - Example: Creates an **Orders** table where the combination of `OrderID` and `ProductID` forms the composite primary key.
+### Constraints on Foreign Keys
 
-- **Foreign Key**:
-  - Command:
-  ```sql
-  CREATE TABLE Students (
-    StudentID INT,
+Foreign keys ensure referential integrity by establishing a link between two tables, typically between the primary key of one table and a column in another table.
+
+#### Constraints on Foreign Keys:
+- **CASCADE**: If a referenced row (in the parent table) is deleted or updated, all rows in the child table that reference this foreign key are also deleted or updated.
+- **SET NULL**: If the referenced row is deleted, all rows in the child table that reference this foreign key will have the foreign key column set to NULL.
+- **NO ACTION**: The default setting. No action is taken when the referenced row is deleted or updated. However, if the referential integrity is violated, the operation will fail.
+- **SET DEFAULT**: If the referenced row is deleted or updated, the foreign key column in the child table will be set to its default value.
+
+#### Example of Foreign Key with Constraints:
+
+**Students Table:**
+
+| StudentID | Name   | BatchID |
+|-----------|--------|---------|
+| 101       | Alice  | B1      |
+| 102       | Bob    | B2      |
+
+**Batch Table:**
+
+| BatchID | Batch Name |
+|---------|------------|
+| B1      | Batch A    |
+| B2      | Batch B    |
+
+Here, `BatchID` in the **Students** table is a foreign key that references `BatchID` in the **Batch** table.
+
+**SQL Example**:
+
+```sql
+CREATE TABLE Batch (
+    BatchID INT PRIMARY KEY,
+    BatchName VARCHAR(50)
+);
+
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY,
     Name VARCHAR(50),
     BatchID INT,
-    FOREIGN KEY (BatchID) REFERENCES Batches(BatchID) ON DELETE CASCADE ON UPDATE CASCADE
-  );
-  ```
-  - Example: Creates a **Students** table where `BatchID` is a foreign key referencing the **BatchID** in the **Batches** table, with cascading updates and deletions.
+    FOREIGN KEY (BatchID) REFERENCES Batch(BatchID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+```
 
-### Problem Statement to solve:
-**Context**: You are working as a Database Engineer for a **library management system**. You need to design and implement a database to manage **Books**, **Members**, and their **Borrowing records**.
-Design and implement the following database tables using **SQL** and apply the knowledge of **keys** (primary key, composite key, and foreign key).
+In this example:
+- **ON DELETE CASCADE**: If a row in the **Batch** table is deleted, any corresponding rows in the **Students** table that reference the deleted `BatchID` will also be deleted.
+- **ON UPDATE CASCADE**: If the `BatchID` in the **Batch** table is updated, all corresponding `BatchID` values in the **Students** table will be updated automatically. 
 
-### Requirements:
+This ensures referential integrity is maintained when rows in the parent table (Batch) are deleted or updated.
 
-1. **Create a Database**:
-   - Create a database called `LibraryDB`.
 
-2. **Tables and Keys**:
-   - **Books Table**:  
-     Stores information about books in the library.
-     - Columns: `BookID` (Primary Key), `Title`, `Author`, `ISBN` (unique).
-     - Requirements: Each book has a unique `BookID` and `ISBN` (International Standard Book Number).
+### Problem statement to solve
 
-   - **Members Table**:  
-     Stores details of library members.
-     - Columns: `MemberID` (Primary Key), `FirstName`, `LastName`, `Email` (unique).
-     - Requirements: Each member has a unique `MemberID` and `Email`.
+You are tasked with designing a database for a **University Course Management System** that stores information about students, courses, and the batches they are assigned to. Your goal is to explore and implement different types of **SQL keys** (super keys, candidate keys, primary keys, composite keys, and foreign keys) and practice using **foreign key constraints**.
 
-   - **Borrowing Table**:  
-     Tracks which members borrow which books.
-     - Columns: `BorrowID` (Primary Key), `MemberID` (Foreign Key referencing Members), `BookID` (Foreign Key referencing Books), `BorrowDate`, `ReturnDate`.
-     - Requirements: A member cannot borrow the same book multiple times without returning it first. Use a **Composite Key** (`MemberID`, `BookID`).
+#### Requirements:
 
-### SQL Queries:
-- Add you Queries here
+1. **Entities**:
+   - **Students**:
+     - Each student has a unique `StudentID`, `Name`, `Email`, and `PhoneNumber`.
+     - Students are assigned to a batch and enroll in various courses.
+   
+   - **Batches**:
+     - Each batch is identified by a unique `BatchID`.
+     - Each batch has a `BatchName`.
+
+   - **Courses**:
+     - Each course has a unique `CourseID` and `CourseName`.
+     - Each student can enroll in multiple courses, and each course can have multiple students (many-to-many relationship).
+   
+2. **Relationships**:
+   - Each student is assigned to a batch (one-to-many relationship).
+   - A student can enroll in multiple courses (many-to-many relationship), so you need to create a **junction table** called `Enrollments` to store the relationship between `Students` and `Courses`.
+
+#### Tasks:
+1. **Create Tables**:
+   - Design tables for `Students`, `Batches`, `Courses`, and `Enrollments`.
+   
+2. **Explore Different Keys**:
+   - Identify **super keys**, **candidate keys**, and **primary keys** in each table.
+   - Identify a scenario where a **composite key** (a key made up of multiple columns) is required.
+   - Example: A composite key in the `Enrollments` table might consist of `StudentID` and `CourseID` to uniquely identify each enrollment.
+
+3. **Implement Foreign Key Constraints**:
+   - Link the `BatchID` in the **Students** table to the `BatchID` in the **Batches** table using a **foreign key**.
+   - Link the `StudentID` and `CourseID` in the **Enrollments** table to their corresponding primary keys in the **Students** and **Courses** tables, respectively.
+   
+4. **Explore Foreign Key Constraints**:
+   - Implement and experiment with different **foreign key constraints** (`CASCADE`, `SET NULL`, `NO ACTION`, `SET DEFAULT`) in various scenarios.
+   - Example:
+     - **ON DELETE CASCADE**: If a student record is deleted, automatically delete all corresponding records in the `Enrollments` table.
+     - **ON UPDATE CASCADE**: If the `BatchID` of a student is updated, the change should reflect across all related records.
+
+#### Example Tables:
+
+1. **Students** Table:
+
+| StudentID | Name   | Email          | PhoneNumber  | BatchID |
+|-----------|--------|----------------|--------------|---------|
+| 101       | Alice  | alice@mail.com | 1234567890   | B1      |
+| 102       | Bob    | bob@mail.com   | 2345678901   | B2      |
+
+2. **Batches** Table:
+
+| BatchID | BatchName |
+|---------|-----------|
+| B1      | Batch A   |
+| B2      | Batch B   |
+
+3. **Courses** Table:
+
+| CourseID | CourseName |
+|----------|------------|
+| C101     | Math       |
+| C102     | Physics    |
+
+4. **Enrollments** Table:
+
+| EnrollmentID | StudentID | CourseID |
+|--------------|-----------|----------|
+| 1            | 101       | C101     |
+| 2            | 102       | C102     |
+
+#### Questions to Answer:
+1. What are the possible **super keys** and **candidate keys** for each table?
+2. Can you create a **composite key** in the `Enrollments` table using `StudentID` and `CourseID`?
+3. What happens when you delete a batch with **ON DELETE CASCADE** in the **Batches** table?
+4. How does **ON UPDATE CASCADE** affect records when you update `BatchID` in the **Students** table?
+
+
 
